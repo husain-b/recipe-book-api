@@ -20,17 +20,7 @@ const upload = multer({
 })
 
 router.get('/users/me', auth,  async (req,res)=>{
-
-    //using async await -- alternative to promoise chaining
-
-        // const users = await User.find({});
-        // if(users.length < 0){
-        //     return res.send('No users found')
-        // }
-        // res.send(users);
         res.send(req.user);  
-
-
 
 })
 
@@ -59,8 +49,6 @@ router.get('/users/:id/avatar',async(req,res)=>{
 })
 
 router.delete('/users/avatar/me', auth, upload.single('avatar'),async (req,res)=>{
-    // const user = await User.findByIdAndUpdate(req.user._id,{avatar : undefined})
-    // console.log(user)
     req.user.avatar = undefined
     await req.user.save()
     res.send()
@@ -93,11 +81,6 @@ router.post('/users/getUser',auth,async (req,res)=>{
         res.status(404).send('No user found with the email : ' + req.body.email);
     }
 
-    // User.findById(_id).then(user=>{
-    //     res.send(user);
-    // }).catch(err=>{
-    //     res.status(404).send('User not found');
-    // })
 })
 
 router.patch('/users/updateUser', auth, async (req,res)=> {
@@ -165,7 +148,7 @@ router.post('/users', async (req,res)=>{
         }
         const token = await user.generateAuthToken();
         await user.save();
-        //sendWelcomeEmail(user.email,user.name)
+        sendWelcomeEmail(user.email,user.name)
         res.status(201).send({idToken : token, email : user.email , expiresIn : 3600000, localId : user._id});
     }catch(e){
         res.status(500).send(e)
@@ -252,7 +235,7 @@ router.delete('/users/me',auth, async (req,res)=> {
     try{
 
         await req.user.remove()
-        //sendGoodByeEmail(req.user.email,req.user.name)
+        sendGoodByeEmail(req.user.email,req.user.name)
     
         res.send(req.user);
     }catch(e){
