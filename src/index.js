@@ -1,7 +1,7 @@
 const express = require('express');
 
 const app = express();
-const port = process.env.PORT || 3311;
+const port = process.env.RECIPE_BOOK_APP_PORT;
 require('./db/mongoose');
 
 const userRouter = require('./routers/user')
