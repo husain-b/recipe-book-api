@@ -149,7 +149,7 @@ router.post('/users', async (req,res)=>{
         const token = await user.generateAuthToken();
         await user.save();
         sendWelcomeEmail(user.email,user.name)
-        res.status(201).send({idToken : token, email : user.email , expiresIn : 3600000, localId : user._id});
+        res.status(201).send({name:user.name,idToken : token, email : user.email , expiresIn : 3600000, localId : user._id});
     }catch(e){
         res.status(500).send(e)
     }
@@ -166,7 +166,7 @@ router.post('/users/login', async (req,res)=>{
         }
         const token = await result.user.generateAuthToken();
         await result.user.save()
-        res.send({idToken : token, email : result.user.email , expiresIn : 3600000, localId : result.user._id});
+        res.send({name : result.user.name,idToken : token, email : result.user.email , expiresIn : 3600000, localId : result.user._id});
     }catch(e){
         res.status(400).send(e);
     }

@@ -35,6 +35,10 @@ app.use(express.json());
 app.use(userRouter);
 app.use(recipeRouter);
 
+app.get('',(req,res)=>{
+    res.send('App is up and runnig at port '+port)
+})
+
 
 app.listen(port,()=>{
     console.log('Server is up and running at Port '+ port);
