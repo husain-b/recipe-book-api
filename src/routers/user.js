@@ -204,7 +204,7 @@ router.post("/users/login", async (req, res) => {
       name: result.user.name,
       idToken: token,
       email: result.user.email,
-      expiresIn: 3600000,
+      expiresIn: process.env.RECIPE_BOOK_APP_TOKEN_EXPIRES_IN,
       localId: result.user._id,
     });
   } catch (e) {
