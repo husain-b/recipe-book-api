@@ -4,6 +4,7 @@ const router = new express.Router();
 const auth = require("../middleware/auth");
 const sharp = require("sharp");
 const multer = require("multer");
+const config = require("../config");
 
 const { sendWelcomeEmail, sendGoodByeEmail } = require("../emails/account");
 
@@ -19,9 +20,7 @@ const upload = multer({
   },
 });
 
-router.get("/users/me", auth, async (req, res) => {
-  res.send(req.user);
-});
+router.get("/users/me", auth, async (req, res) => res.send(req.user));
 
 router.post(
   "/users/me/avatar",
@@ -174,17 +173,18 @@ router.post("/users", async (req, res) => {
           $pull: { tokens: { token: token } },
         }
       );
-    }, process.env.RECIPE_BOOK_APP_TOKEN_EXPIRES_IN);
+    }, config.TOKEN_EXPIRES_IN);
 
     sendWelcomeEmail(user.email, user.name);
     res.status(201).send({
       name: user.name,
       idToken: token,
       email: user.email,
-      expiresIn: process.env.RECIPE_BOOK_APP_TOKEN_EXPIRES_IN,
+      expiresIn: config.TOKEN_EXPIRES_IN,
       localId: user._id,
     });
   } catch (e) {
+    console.log(e)
     res.status(500).send(e);
   }
 });
@@ -204,7 +204,7 @@ router.post("/users/login", async (req, res) => {
       name: result.user.name,
       idToken: token,
       email: result.user.email,
-      expiresIn: process.env.RECIPE_BOOK_APP_TOKEN_EXPIRES_IN,
+      expiresIn: config.TOKEN_EXPIRES_IN,
       localId: result.user._id,
     });
   } catch (e) {

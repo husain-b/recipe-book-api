@@ -3,6 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Recipe = require("./recipe");
+const config = require("../config");
 
 const userSchema = mongoose.Schema(
   {
@@ -87,8 +88,8 @@ userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign(
     { _id: user._id.toString() },
-    process.env.RECIPE_BOOK_APP_JWT_SECRET,
-    { expiresIn: process.env.RECIPE_BOOK_APP_TOKEN_EXPIRES_IN }
+    config.JWT_SECRET,
+    { expiresIn: config.TOKEN_EXPIRES_IN }
   );
   user.tokens = user.tokens.concat({ token });
   return token;

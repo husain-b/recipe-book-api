@@ -1,3 +1,4 @@
 const mongoose = require("mongoose");
+const config = require('../config');
 
-mongoose.connect(process.env.RECIPE_BOOK_APP_MONGODB_URI)
+mongoose.connect(config.MONGODB_URI)
